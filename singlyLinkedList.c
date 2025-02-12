@@ -18,6 +18,7 @@ void DELETE_BEGIN();
 void DELETE_GIVEN();
 void DELETE_END();
 void DELETE_SECOND_LAST();
+void REVERSE();
 void DISP();
 
 int menu()
@@ -34,8 +35,9 @@ int menu()
     printf("\n 8] DELETE AT GIVEN");
     printf("\n 9] DELETE AT END");
     printf("\n 10] DELETE 2ND LAST");
-    printf("\n 11] DISPLAY A LINKED LIST");
-    printf("\n 12] EXIT");
+    printf("\n 11] REVERSE");
+    printf("\n 12] DISPLAY A LINKED LIST");
+    printf("\n 13] EXIT");
 
     printf("\n\nENTER YOUR CHOICE : ");
     scanf("%d", &choice);
@@ -92,16 +94,20 @@ void main()
             DISP();
             break;
         case 11:
+            REVERSE();
             DISP();
             break;
         case 12:
+            DISP();
+            break;
+        case 13:
             // getch();
             exit(0);
         default:
             printf("\n INVALID INPUT");
         }
         // getch();
-    } while (ch != 12);
+    } while (ch != 13);
 }
 
 void CREATE()
@@ -341,13 +347,14 @@ void DELETE_END()
 
 void DELETE_SECOND_LAST()
 {
-    struct node *temp = start, *prev = NULL;
-
     if (start == NULL || start->next == NULL)
     {
-        printf("\n NOT ENOUGH NODES TO DELETE SECOND LAST");
+        printf("\n No sufficient nodes to delete second last.");
         return;
     }
+
+    struct node *temp = start;
+    struct node *prev = NULL;
 
     while (temp->next->next != NULL)
     {
@@ -355,16 +362,29 @@ void DELETE_SECOND_LAST()
         temp = temp->next;
     }
 
-    // Now temp points to the second last node
-    if (prev == NULL)
-    {
-        // This case happens when there are only two nodes
-        free(start);
-        start = temp->next;
-    }
-    else
+    if (prev != NULL)
     {
         prev->next = temp->next;
         free(temp);
     }
+    else
+    {
+        free(start);
+        start = temp->next;
+    }
+}
+
+void REVERSE()
+{
+    struct node *prev, *temp, *temp2;
+    prev = NULL;
+    temp = start;
+    while (temp != NULL)
+    {
+        temp2 = temp->next;
+        temp->next = prev;
+        prev = temp;
+        temp = temp2;
+    }
+    start = prev;
 }
