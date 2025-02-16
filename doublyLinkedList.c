@@ -12,7 +12,10 @@ struct node
 void CREATE();
 void INSERT_BEGIN();
 void INSERT_BEFORE();
+void INSERT_AFTER();
 void INSERT_END();
+void DELETE_BEGIN();
+void DELETE_GIVEN();
 void DISP();
 
 int menu()
@@ -22,9 +25,12 @@ int menu()
     printf("\n\n 1] CREATE A DOUBLY LINKED LIST");
     printf("\n 2] INSERT AT BEGINING");
     printf("\n 3] INSERT AT BEFORE");
-    printf("\n 4] INSERT AT END");
-    printf("\n 5] DISPLAY A DOUBLY LINKED LIST");
-    printf("\n 6] EXIT");
+    printf("\n 4] INSERT AT AFTER");
+    printf("\n 5] INSERT AT END");
+    printf("\n 6] DELETE BEGIN");
+    printf("\n 7] DELETE AT GIVEN");
+    printf("\n 8] DISPLAY A DOUBLY LINKED LIST");
+    printf("\n 9] EXIT");
 
     printf("\n\nENTER YOUR CHOICE : ");
     scanf("%d", &choice);
@@ -53,20 +59,32 @@ void main()
             DISP();
             break;
         case 4:
-            INSERT_END();
+            INSERT_AFTER();
             DISP();
             break;
         case 5:
+            INSERT_END();
             DISP();
             break;
         case 6:
+            DELETE_BEGIN();
+            DISP();
+            break;
+        case 7:
+            DELETE_GIVEN();
+            DISP();
+            break;
+        case 8:
+            DISP();
+            break;
+        case 9:
             // getch();
             exit(0);
         default:
             printf("\n INVALID DOUBLY LINKED LIST");
         }
         // getch();
-    } while (ch != 6);
+    } while (ch != 9);
 }
 
 void CREATE()
@@ -165,29 +183,92 @@ void INSERT_BEFORE()
     }
 }
 
-void INSERT_END()
+void INSERT_AFTER()
 {
+    int tnum;
     struct node *newnode, *temp;
-    newnode = malloc(sizeof(struct node));
 
-    printf("\n ENTER A NUMBER : ");
-    scanf("%d", &newnode->num);
+    printf("\n ENTER A TARGET NUMBER: ");
+    scanf("%d", &tnum);
 
-    newnode->next = NULL;
+    temp = start;
 
-    if (start == NULL)
+    while (temp != NULL && temp->num != tnum)
     {
-        newnode->prev = NULL;
-        start = newnode;
+        temp = temp->next;
+    }
+    if (temp == NULL)
+    {
+        printf("NUMBER NOT FOUND");
     }
     else
     {
-        temp = start;
-        while (temp->next != NULL)
+        newnode = malloc(sizeof(struct node));
+        printf("ENTER A NUMBER:");
+        scanf("%d", &newnode->num);
+
+        newnode->prev = temp;
+        newnode->next = temp->next;
+        temp->next->prev = newnode;
+        temp->next = newnode;
+    }
+}
+
+void INSERT_END()
+{
+    struct node *newnode, *temp;
+    temp = start;
+
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    newnode = malloc(sizeof(struct node));
+    printf("ENTER A NUMBER:");
+    scanf("%d", &newnode->num);
+
+    temp->next = newnode;
+    newnode->prev = temp;
+    newnode->next = NULL;
+}
+
+void DELETE_BEGIN()
+{
+    struct node *temp;
+    temp = start->next;
+    free(start);
+    start = temp;
+    start->prev = NULL;
+}
+
+void DELETE_GIVEN()
+{
+    int tnum;
+    struct node *temp;
+
+    printf("\n ENTER A TARGET NUMBER: ");
+    scanf("%d", &tnum);
+
+    if (tnum == start->num)
+    {
+        DELETE_BEGIN();
+    }
+    else
+    {
+        temp = start->next;
+        while (temp != NULL && temp->num != tnum)
         {
             temp = temp->next;
         }
-        temp->next = newnode;
-        newnode->prev = temp;
+        if (temp == NULL)
+        {
+            printf("NUMBER NOT FOUND");
+        }
+        else
+        {
+            temp->prev->next = temp->next;
+            temp->next->prev = temp->prev;
+            free(temp);
+        }
     }
 }
