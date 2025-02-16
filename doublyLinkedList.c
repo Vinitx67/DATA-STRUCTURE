@@ -16,6 +16,7 @@ void INSERT_AFTER();
 void INSERT_END();
 void DELETE_BEGIN();
 void DELETE_GIVEN();
+void PRINT_MIDDLE();
 void DISP();
 
 int menu()
@@ -29,8 +30,9 @@ int menu()
     printf("\n 5] INSERT AT END");
     printf("\n 6] DELETE BEGIN");
     printf("\n 7] DELETE AT GIVEN");
-    printf("\n 8] DISPLAY A DOUBLY LINKED LIST");
-    printf("\n 9] EXIT");
+    printf("\n 8] PRINT AT MIDDLE");
+    printf("\n 9] DISPLAY A DOUBLY LINKED LIST");
+    printf("\n 10] EXIT");
 
     printf("\n\nENTER YOUR CHOICE : ");
     scanf("%d", &choice);
@@ -75,16 +77,20 @@ void main()
             DISP();
             break;
         case 8:
+            PRINT_MIDDLE();
             DISP();
             break;
         case 9:
+            DISP();
+            break;
+        case 10:
             // getch();
             exit(0);
         default:
             printf("\n INVALID DOUBLY LINKED LIST");
         }
         // getch();
-    } while (ch != 9);
+    } while (ch != 10);
 }
 
 void CREATE()
@@ -271,4 +277,23 @@ void DELETE_GIVEN()
             free(temp);
         }
     }
+}
+
+void PRINT_MIDDLE()
+{
+    struct node *slow = start, *fast = start;
+
+    if (start == NULL)
+    {
+        printf("\nThe list is empty.");
+        return;
+    }
+
+    while (fast != NULL && fast->next != NULL)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    printf("\nMiddle element is: %d", slow->num);
 }
