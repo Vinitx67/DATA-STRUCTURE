@@ -13,6 +13,9 @@ void INSERT_BEGIN();
 void INSERT_BEFORE();
 void INSERT_AFTER();
 void INSERT_END();
+void DELETE_BEGIN();
+void DELETE_GIVEN();
+void DELETE_END();
 void DISP();
 
 int menu()
@@ -24,8 +27,11 @@ int menu()
     printf("\n 3] INSERT AT BEFORE");
     printf("\n 4] INSERT AT AFTER");
     printf("\n 5] INSERT AT END");
-    printf("\n 6] DISPLAY A CIRCULALRLY LINKED LIST");
-    printf("\n 7] EXIT");
+    printf("\n 6] DELETE BEGIN");
+    printf("\n 7] DELETE GIVEN");
+    printf("\n 8] DELETE END");
+    printf("\n 9] DISPLAY A CIRCULALRLY LINKED LIST");
+    printf("\n 10] EXIT");
 
     printf("\n\nENTER YOUR CHOICE : ");
     scanf("%d", &choice);
@@ -62,16 +68,28 @@ void main()
             DISP();
             break;
         case 6:
+            DELETE_BEGIN();
             DISP();
             break;
         case 7:
+            DELETE_GIVEN();
+            DISP();
+            break;
+        case 8:
+            DELETE_END();
+            DISP();
+            break;
+        case 9:
+            DISP();
+            break;
+        case 10:
             // getch();
             exit(0);
         default:
             printf("\n INVALID DOUBLY LINKED LIST");
         }
         // getch();
-    } while (ch != 7);
+    } while (ch != 10);
 }
 
 void CREATE()
@@ -105,7 +123,7 @@ void DISP()
 
     if (start == NULL)
     {
-        printf("/n NO LINKED LIST");
+        printf("\n NO LINKED LIST");
     }
     else
     {
@@ -203,24 +221,93 @@ void INSERT_AFTER()
 void INSERT_END()
 {
     struct node *newnode, *temp;
-    newnode = malloc(sizeof(struct node));
 
+    temp = start;
+
+    while (temp->next != start)
+    {
+        temp = temp->next;
+    }
+    newnode = malloc(sizeof(struct node));
     printf("\n ENTER A NUMBER : ");
     scanf("%d", &newnode->num);
 
-    if (start == NULL)
+    newnode->next = start;
+    temp->next = newnode;
+}
+
+void DELETE_BEGIN()
+{
+    struct node *temp, *temp2;
+
+    if (start->next == start)
     {
-        start = newnode;
-        start->next = start;
+        free(start);
+        start = NULL;
     }
     else
     {
+        temp2 = start->next;
         temp = start;
         while (temp->next != start)
         {
             temp = temp->next;
         }
-        temp->next = newnode;
-        newnode->next = start;
+        temp->next = temp2;
+        free(start);
+        start = temp2;
+    }
+}
+
+void DELETE_GIVEN()
+{
+    int tnum;
+    struct node *temp, *temp2;
+
+    printf("\n ENTER A NUMBER TO BE DELETED :");
+    scanf("%d", &tnum);
+
+    if (tnum == start->num)
+    {
+        DELETE_BEGIN();
+    }
+    else
+    {
+        temp = start;
+        while (temp->next != start && temp->next->num != tnum)
+        {
+            temp = temp->next;
+        }
+        if (temp->next == start)
+        {
+            printf("NUMBER NOT FOUND");
+        }
+        else
+        {
+            temp2 = temp->next->next;
+            free(temp->next);
+            temp->next = temp2;
+        }
+    }
+}
+
+void DELETE_END()
+{
+    struct node *temp;
+
+    if (start->next == start)
+    {
+        free(start);
+        start = NULL;
+    }
+    else
+    {
+        temp = start;
+        while (temp->next->next != start)
+        {
+            temp = temp->next;
+        }
+        free(temp->next);
+        temp->next = start;
     }
 }
