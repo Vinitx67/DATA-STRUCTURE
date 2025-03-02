@@ -2,32 +2,21 @@
 #include <string.h>
 #include <ctype.h>
 
-int main()
+void main()
 {
-    char str[100];
-    int capitalize = 1;
+    char str[30];
+    int i;
 
-    printf("enter a string: ");
+    printf("ENTER A STRING: ");
     gets(str);
 
-    for (int i = 0; i < strlen(str); i++)
+    str[0] = toupper(str[0]);
+    for (i = 1; i < strlen(str); i++)
     {
-        if (capitalize && str[i] != ' ')
-        {
-            str[i] = toupper(str[i]);
-            capitalize = 0;
-        }
-        else
-        {
-            str[i] = tolower(str[i]);
-        }
-
         if (str[i] == ' ')
         {
-            capitalize = 1;
+            str[i + 1] = toupper(str[i + 1]);
         }
     }
-
-    printf("\ncapitalized string: %s\n", str);
-    return 0;
+    printf("\nCAPITALIZED STRING: %s\n", str);
 }
