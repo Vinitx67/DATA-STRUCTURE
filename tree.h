@@ -181,3 +181,86 @@ void LevelOrder(Node *root)
     PrintLevel(root, i);
   }
 }
+
+void Insert(char *name, int roll, Node **root)
+{
+  if (*root == NULL)
+  {
+    *root = CreateNewNode(name, roll);
+    return;
+  }
+  if (roll < (*(root))->roll)
+  {
+    Insert(name, roll, &((*(root))->left));
+  }
+  else
+  {
+    Insert(name, roll, &((*(root))->right));
+  }
+}
+
+Node *FindMin(Node *node)
+{
+  while (node != NULL && node->left != NULL)
+  {
+    node = node->left;
+  }
+  return node;
+}
+
+Node *Delete(Node *root, int roll)
+{
+  Node *t;
+  // NOTHING TO DELETE
+  if (root == NULL)
+  {
+    return NULL;
+  }
+  // THE ROLL NUMBER TO DELETE IS SMALLER SO GO LEFT
+  if (roll < root->roll)
+  {
+    root->left = Delete(root->left, roll);
+  }
+  // THE ROLL NUMBER TO DELETE IS LARGER SO GO RIGHT
+  else if (roll > root->roll)
+  {
+    root->right = Delete(root->right, roll);
+  }
+  // WE HAVE FOUND THE NODE
+  else
+  {
+    if (root->left == NULL)
+    {
+      t = root->right;
+      free(root);
+      return t;
+    }
+    else if (root->right == NULL)
+    {
+      t = root->left;
+      free(root);
+      return t;
+    }
+    else
+    {
+      t = FindMin(root->right);
+      strcpy(root->name, t->name);
+      root->roll = t->roll;
+      root->right = Delete(root->right, t->roll);
+    }
+  }
+  return root;
+}
+
+void ClearTree(Node *root)
+{
+  if (root == NULL)
+  {
+    return;
+  }
+  ClearTree(root->left);
+  ClearTree(root->right);
+
+  free(root);
+  root = NULL;
+}

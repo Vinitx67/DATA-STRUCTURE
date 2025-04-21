@@ -11,12 +11,17 @@ int main()
     root->right = CreateNewNode("Tanishq", 23);
     root->left->left = CreateNewNode("Mandar", 24);
     root->left->right = CreateNewNode("Izhaan", 25);
-    printf("\nPre Order:");
+
+    printf("\nPRE ORDER:");
     PreOrder(root);
-    printf("\nIn Order:");
+
+    printf("\n\nIN ORDER:");
     InOrder(root);
-    printf("\nPost Order:");
+
+    printf("\n\nPSOT ORDER:");
     PostOrder(root);
+
+    printf("\n\nSEARCHING:");
     Node *temp;
     temp = SearchByName("Vinit", root);
     if (temp == NULL)
@@ -28,8 +33,17 @@ int main()
         printf("\nFOUND");
         PrintData(temp);
     }
+
+    printf("\n\nPRINTING LEVEL ORDER:");
     root->left->right->left = CreateNewNode("Ahmad", 26);
     LevelOrder(root);
-    free(root);
-    root = NULL;
+
+    printf("\n\nAFTER INSERTING:");
+    Insert("qausain", 27, &root);
+    Insert("aashu", 17, &root);
+    Insert("sidhu", 11, &root);
+    PreOrder(root);
+    ClearTree(root);
+    // free(root);
+    // root = NULL;
 }
